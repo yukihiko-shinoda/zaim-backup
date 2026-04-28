@@ -1,0 +1,7 @@
+services:
+  zaim-backup:
+    build: .
+    image: futureys/zaim-backup:development
+    volumes:
+      - .:/workspace
+      - /workspace/.venv

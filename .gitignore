@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# For this project
+config.yml
+money.csv
+!.gitkeep
+/.cache_zaim_api/*
