@@ -11,7 +11,7 @@ from zaimbackup.zaim.api.models.money import MoneyTypeDef
 
 
 def save_as_csv(file_path: Path, data: list[MoneyTypeDef]) -> None:
-    with file_path.open("w", encoding="utf-8") as file:
+    with file_path.open("w", encoding="utf-8", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=MoneyTypeDef.__annotations__.keys())
         writer.writeheader()
         writer.writerows(data)
