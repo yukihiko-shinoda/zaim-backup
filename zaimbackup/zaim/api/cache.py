@@ -1,8 +1,10 @@
 """To cache Zaim API data."""
 
+from __future__ import annotations
+
 import csv
-from collections.abc import Generator
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypedDict
 from typing import TypeVar
@@ -11,11 +13,15 @@ from typing import get_type_hints
 
 import yaml
 
-from zaimbackup.config import Config
 from zaimbackup.zaim.api import ZaimApi
-from zaimbackup.zaim.api.models.category import Category
-from zaimbackup.zaim.api.models.genre import Genre
 from zaimbackup.zaim.api.models.money import MoneyTypeDef
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from zaimbackup.config import Config
+    from zaimbackup.zaim.api.models.category import Category
+    from zaimbackup.zaim.api.models.genre import Genre
 
 TypeVarTypedDict = TypeVar("TypeVarTypedDict")
 

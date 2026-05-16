@@ -1,19 +1,22 @@
 """To join Zaim API data into Money objects."""
 
+from __future__ import annotations
+
 import copy
-from collections.abc import Generator
-from collections.abc import Iterable
 from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import cast
 
-from zaimbackup.config import Config
 from zaimbackup.zaim.api.cache import ZaimCache
 from zaimbackup.zaim.api.models.money import Money
 from zaimbackup.zaim.api.models.money import MoneyTypeDef
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+    from collections.abc import Iterable
     from typing import Any
+
+    from zaimbackup.config import Config
 
 TypeVarMoney = TypeVar("TypeVarMoney", bound=Money)
 

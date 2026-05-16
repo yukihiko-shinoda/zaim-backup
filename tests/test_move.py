@@ -1,6 +1,9 @@
 """Tests for zaimbackup/move.py: AbstractMove subclasses and Move orchestrator."""
 
+from __future__ import annotations
+
 import datetime
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import cast
 from unittest.mock import MagicMock
@@ -16,8 +19,10 @@ from zaimbackup.move import Move
 from zaimbackup.move import MoveIncome
 from zaimbackup.move import MovePayment
 from zaimbackup.move import MoveTransfer
-from zaimbackup.zaim.api.models.account import Account
 from zaimbackup.zaim.api.models.money import Money
+
+if TYPE_CHECKING:
+    from zaimbackup.zaim.api.models.account import Account
 
 FAKE_ACCOUNT_OTHER: Account = cast("Account", {**FAKE_ACCOUNT, "id": 200, "name": "銀行"})
 FAKE_ACCOUNT_THIRD: Account = cast("Account", {**FAKE_ACCOUNT, "id": 999, "name": "Other", "sort": 2})

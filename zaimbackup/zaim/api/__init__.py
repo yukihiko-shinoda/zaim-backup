@@ -1,13 +1,17 @@
 """The package of Zaim API."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from typing import cast
 
 from pyzaim import ZaimAPI
 from requests_oauthlib import OAuth1Session
 
-from zaimbackup.zaim.api.models.account import Account
-from zaimbackup.zaim.api.models.category import Category
-from zaimbackup.zaim.api.models.genre import Genre
+if TYPE_CHECKING:
+    from zaimbackup.zaim.api.models.account import Account
+    from zaimbackup.zaim.api.models.category import Category
+    from zaimbackup.zaim.api.models.genre import Genre
 
 
 # Reason: pyzaim is not typed, so we need to cast the return type.

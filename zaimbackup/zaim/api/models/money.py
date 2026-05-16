@@ -1,13 +1,18 @@
 """Zaim API money."""
 
+from __future__ import annotations
+
 import datetime
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import TypedDict
 
 from zaimbackup.zaim import JST
-from zaimbackup.zaim.api.models.account import Account
-from zaimbackup.zaim.api.models.category import Category
-from zaimbackup.zaim.api.models.genre import Genre
+
+if TYPE_CHECKING:
+    from zaimbackup.zaim.api.models.account import Account
+    from zaimbackup.zaim.api.models.category import Category
+    from zaimbackup.zaim.api.models.genre import Genre
 
 
 class MoneyTypeDef(TypedDict):

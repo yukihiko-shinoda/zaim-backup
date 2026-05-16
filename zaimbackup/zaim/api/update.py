@@ -1,10 +1,15 @@
 """Parameter TypedDicts for Zaim API update calls."""
 
-# Reason: Maybe Flake8's issue:
-# - False positive F401 · Issue #2027 · PyCQA/flake8
-#   https://github.com/PyCQA/flake8/issues/2027
-from datetime import date  # noqa: F401,RUF100
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from typing import TypedDict
+
+if TYPE_CHECKING:
+    # Reason: Pyflake's issue:
+    # - False positive F401 in recent version (at least v3.4.0) · Issue #850 · PyCQA/pyflakes
+    #   https://github.com/pycqa/pyflakes/issues/850
+    from datetime import date  # noqa: F401,RUF100
 
 
 class ParameterTransfer(TypedDict):
