@@ -1,13 +1,15 @@
 """Shared fixtures and fake data for zaimbackup tests."""
 
-from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
 
+from zaimbackup.zaim.api.models.account import Account
+from zaimbackup.zaim.api.models.category import Category
+from zaimbackup.zaim.api.models.genre import Genre
 from zaimbackup.zaim.api.models.money import MoneyTypeDef
 
-FAKE_CATEGORY: dict[str, Any] = {
+FAKE_CATEGORY: Category = {
     "id": 1,
     "name": "食費",
     "mode": "payment",
@@ -16,8 +18,8 @@ FAKE_CATEGORY: dict[str, Any] = {
     "active": 1,
     "modified": "2024-01-01",
 }
-FAKE_GENRE: dict[str, Any] = {"id": 10, "category_id": 1, "name": "外食"}
-FAKE_ACCOUNT: dict[str, Any] = {
+FAKE_GENRE: Genre = {"id": 10, "category_id": 1, "name": "外食"}
+FAKE_ACCOUNT: Account = {
     "id": 100,
     "name": "現金",
     "modified": "2024-01-01",
@@ -66,7 +68,7 @@ def fake_config() -> MagicMock:
     cfg = MagicMock()
     cfg.api = {
         "consumer_id": "fake",
-        "consumer_secret": "fake",
+        "consumer_secret": "fake",  # nosec: B105 -- fake credentials
         "access_token": "fake",
         "access_token_secret": "fake",
         "oauth_verifier": "fake",

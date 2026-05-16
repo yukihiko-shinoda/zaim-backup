@@ -14,14 +14,15 @@ def _make_api() -> ZaimApi:
 
 
 def test_auth_creates_oauth_session_with_correct_credentials() -> None:
+    """Auth property constructs an OAuth1Session with the credentials supplied to __init__."""
     api = _make_api()
     with patch("zaimbackup.zaim.api.OAuth1Session") as mock_session_cls, patch.object(api, "_build_id_table"):
         result = api.auth
         mock_session_cls.assert_called_once_with(
             client_key="fake",
-            client_secret="fake",  # noqa: S106
+            client_secret="fake",  # nosec: B106 # noqa: S106 -- fake credentials
             resource_owner_key="fake",
-            resource_owner_secret="fake",  # noqa: S106
+            resource_owner_secret="fake",  # nosec: B106 # noqa: S106 -- fake credentials
             callback_uri="https://www.zaim.net/",
             verifier="fake",
         )
@@ -29,6 +30,7 @@ def test_auth_creates_oauth_session_with_correct_credentials() -> None:
 
 
 def test_auth_is_cached_and_calls_build_id_table_once() -> None:
+    """Auth is memoised: OAuth1Session and _build_id_table are each called exactly once."""
     api = _make_api()
     with (
         patch("zaimbackup.zaim.api.OAuth1Session") as mock_session_cls,

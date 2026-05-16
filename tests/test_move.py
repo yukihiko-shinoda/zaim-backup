@@ -2,68 +2,41 @@
 
 import datetime
 from typing import Any
+from typing import cast
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
 import pytest
 
+from tests.conftest import FAKE_ACCOUNT
+from tests.conftest import FAKE_CATEGORY
+from tests.conftest import FAKE_GENRE
+from tests.conftest import FAKE_MONEY
 from zaimbackup.move import Move
 from zaimbackup.move import MoveIncome
 from zaimbackup.move import MovePayment
 from zaimbackup.move import MoveTransfer
+from zaimbackup.zaim.api.models.account import Account
 from zaimbackup.zaim.api.models.money import Money
 
-FAKE_CATEGORY: dict[str, Any] = {
-    "id": 1,
-    "name": "食費",
-    "mode": "payment",
-    "sort": 1,
-    "parent_category_id": 0,
-    "active": 1,
-    "modified": "2024-01-01",
-}
-FAKE_GENRE: dict[str, Any] = {"id": 10, "category_id": 1, "name": "外食"}
-FAKE_ACCOUNT: dict[str, Any] = {
-    "id": 100,
-    "name": "現金",
-    "modified": "2024-01-01",
-    "sort": 1,
-    "active": 1,
-    "local_id": 0,
-    "website_id": 0,
-    "parent_account_id": 0,
-}
-FAKE_ACCOUNT_OTHER: dict[str, Any] = {**FAKE_ACCOUNT, "id": 200, "name": "銀行"}
+FAKE_ACCOUNT_OTHER: Account = cast("Account", {**FAKE_ACCOUNT, "id": 200, "name": "銀行"})
+FAKE_ACCOUNT_THIRD: Account = cast("Account", {**FAKE_ACCOUNT, "id": 999, "name": "Other", "sort": 2})
 EXPECTED_DATE = datetime.date(2024, 1, 15)
 
 
-def _make_money(**overrides: Any) -> Money:
+def _make_money(**overrides: object) -> Money:
     defaults: dict[str, Any] = {
-        "id": 1,
-        "user_id": 99,
-        "date": "2024-01-15",
-        "mode": "payment",
-        "category_id": 1,
-        "genre_id": 10,
-        "from_account_id": 100,
-        "to_account_id": 0,
-        "amount": 500,
+        **FAKE_MONEY,
         "comment": "test comment",
-        "active": 1,
-        "created": "2024-01-15 00:00:00",
-        "currency_code": "JPY",
         "name": "shop name",
-        "receipt_id": 0,
-        "place_uid": "",
         "place": "place name",
-        "original_money_ids": "",
         "category": dict(FAKE_CATEGORY),
         "genre": dict(FAKE_GENRE),
         "from_account": dict(FAKE_ACCOUNT),
         "to_account": None,
     }
     defaults.update(overrides)
-    return Money(**defaults)  # type: ignore[arg-type]
+    return Money(**defaults)
 
 
 # ---------------------------------------------------------------------------
@@ -72,6 +45,7 @@ def _make_money(**overrides: Any) -> Money:
 
 
 def test_move_transfer_build_parameters_returns_correct_dict() -> None:
+    """build_parameters maps Money fields to ParameterTransfer with account replacement."""
     money = _make_money(
         mode="transfer",
         from_account=dict(FAKE_ACCOUNT),
@@ -90,43 +64,27 @@ def test_move_transfer_build_parameters_returns_correct_dict() -> None:
 
 
 def test_move_transfer_build_parameters_replaces_from_account_id() -> None:
+    """from_account_id is replaced when it matches account_to_be_replaced."""
     money = _make_money(
         mode="transfer",
         from_account=dict(FAKE_ACCOUNT),
-        to_account={
-            "id": 999,
-            "name": "Other",
-            "modified": "2024-01-01",
-            "sort": 2,
-            "active": 1,
-            "local_id": 0,
-            "website_id": 0,
-            "parent_account_id": 0,
-        },
+        to_account=dict(FAKE_ACCOUNT_THIRD),
     )
     result = MoveTransfer(MagicMock(), 100, 200).build_parameters(money)
-    assert result["from_account_id"] == 200
-    assert result["to_account_id"] == 999
+    assert result["from_account_id"] == FAKE_ACCOUNT_OTHER["id"]
+    assert result["to_account_id"] == FAKE_ACCOUNT_THIRD["id"]
 
 
 def test_move_transfer_build_parameters_replaces_to_account_id() -> None:
+    """to_account_id is replaced when it matches account_to_be_replaced."""
     money = _make_money(
         mode="transfer",
-        from_account={
-            "id": 999,
-            "name": "Other",
-            "modified": "2024-01-01",
-            "sort": 2,
-            "active": 1,
-            "local_id": 0,
-            "website_id": 0,
-            "parent_account_id": 0,
-        },
+        from_account=dict(FAKE_ACCOUNT_THIRD),
         to_account=dict(FAKE_ACCOUNT),
     )
     result = MoveTransfer(MagicMock(), 100, 200).build_parameters(money)
-    assert result["from_account_id"] == 999
-    assert result["to_account_id"] == 200
+    assert result["from_account_id"] == FAKE_ACCOUNT_THIRD["id"]
+    assert result["to_account_id"] == FAKE_ACCOUNT_OTHER["id"]
 
 
 def test_move_transfer_build_parameters_raises_when_from_account_is_none() -> None:
@@ -142,6 +100,7 @@ def test_move_transfer_build_parameters_raises_when_to_account_is_none() -> None
 
 
 def test_move_transfer_call_api_calls_update_transfer() -> None:
+    """call_api delegates to zaim_api.update_transfer with the given parameters."""
     mock_api = MagicMock()
     params = {
         "data_id": 1,
@@ -186,7 +145,7 @@ def test_move_payment_build_parameters_with_no_category_or_genre() -> None:
 def test_move_payment_build_parameters_replaces_from_account_id() -> None:
     money = _make_money(mode="payment", from_account=dict(FAKE_ACCOUNT))
     result = MovePayment(MagicMock(), 100, 200).build_parameters(money)
-    assert result["from_account_id"] == 200
+    assert result["from_account_id"] == FAKE_ACCOUNT_OTHER["id"]
 
 
 def test_move_payment_build_parameters_raises_when_from_account_is_none() -> None:
@@ -196,6 +155,7 @@ def test_move_payment_build_parameters_raises_when_from_account_is_none() -> Non
 
 
 def test_move_payment_call_api_calls_update_payment() -> None:
+    """call_api delegates to zaim_api.update_payment with the given parameters."""
     mock_api = MagicMock()
     params = {
         "data_id": 1,
@@ -234,7 +194,7 @@ def test_move_income_build_parameters_returns_correct_dict() -> None:
 def test_move_income_build_parameters_replaces_to_account_id() -> None:
     money = _make_money(mode="income", from_account=None, to_account=dict(FAKE_ACCOUNT))
     result = MoveIncome(MagicMock(), 100, 200).build_parameters(money)
-    assert result["to_account_id"] == 200
+    assert result["to_account_id"] == FAKE_ACCOUNT_OTHER["id"]
 
 
 def test_move_income_build_parameters_raises_when_to_account_is_none() -> None:
@@ -244,6 +204,7 @@ def test_move_income_build_parameters_raises_when_to_account_is_none() -> None:
 
 
 def test_move_income_call_api_calls_update_income() -> None:
+    """call_api delegates to zaim_api.update_income with the given parameters."""
     mock_api = MagicMock()
     params = {
         "data_id": 1,
@@ -259,7 +220,7 @@ def test_move_income_call_api_calls_update_income() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Move.move (dispatcher)
+# Move.move
 # ---------------------------------------------------------------------------
 
 
@@ -272,6 +233,7 @@ def _make_move(fake_config: MagicMock, mock_api: MagicMock) -> Move:
 
 
 def test_move_move_skips_when_neither_account_matches(fake_config: MagicMock) -> None:
+    """Move() is a no-op when neither from_account nor to_account matches the target ID."""
     mock_api = MagicMock()
     move_obj = _make_move(fake_config, mock_api)
     money = _make_money(
@@ -303,6 +265,7 @@ def test_move_move_skips_when_neither_account_matches(fake_config: MagicMock) ->
 
 
 def test_move_move_skips_when_from_and_to_account_are_none(fake_config: MagicMock) -> None:
+    """Move() is a no-op when both from_account and to_account are None."""
     mock_api = MagicMock()
     move_obj = _make_move(fake_config, mock_api)
     money = _make_money(from_account=None, to_account=None)
@@ -313,6 +276,7 @@ def test_move_move_skips_when_from_and_to_account_are_none(fake_config: MagicMoc
 
 
 def test_move_move_dispatches_payment(fake_config: MagicMock) -> None:
+    """Move() calls update_payment for payment-mode entries."""
     mock_api = MagicMock()
     move_obj = _make_move(fake_config, mock_api)
     money = _make_money(mode="payment", from_account=dict(FAKE_ACCOUNT))
@@ -323,6 +287,7 @@ def test_move_move_dispatches_payment(fake_config: MagicMock) -> None:
 
 
 def test_move_move_dispatches_transfer(fake_config: MagicMock) -> None:
+    """Move() calls update_transfer for transfer-mode entries."""
     mock_api = MagicMock()
     move_obj = _make_move(fake_config, mock_api)
     money = _make_money(
@@ -337,6 +302,7 @@ def test_move_move_dispatches_transfer(fake_config: MagicMock) -> None:
 
 
 def test_move_move_dispatches_income(fake_config: MagicMock) -> None:
+    """Move() calls update_income for income-mode entries."""
     mock_api = MagicMock()
     move_obj = _make_move(fake_config, mock_api)
     money = _make_money(mode="income", from_account=None, to_account=dict(FAKE_ACCOUNT))
@@ -352,6 +318,7 @@ def test_move_move_dispatches_income(fake_config: MagicMock) -> None:
 
 
 def test_move_call_iterates_list_money(fake_config: MagicMock) -> None:
+    """__call__ iterates joiner.list_money and dispatches each entry."""
     mock_api = MagicMock()
     money1 = _make_money(mode="payment", from_account=dict(FAKE_ACCOUNT))
     money2 = _make_money(id=2, mode="income", from_account=None, to_account=dict(FAKE_ACCOUNT))

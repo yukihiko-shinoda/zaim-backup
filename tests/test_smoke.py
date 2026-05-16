@@ -1,17 +1,24 @@
 """Smoke test: full join path without network or workspace I/O."""
 
+from pathlib import Path
+from unittest.mock import MagicMock
 from unittest.mock import patch
+
+import pytest
 
 from zaimbackup.zaim.api.cache import ZaimCache
 from zaimbackup.zaim.api.joiner import Joiner
 
+EXPECTED_AMOUNT = 500
+
 
 def test_joiner_returns_money_with_joined_fields(
-    mock_zaim_api,
-    fake_config,
-    tmp_path,
-    monkeypatch,
-):
+    mock_zaim_api: MagicMock,
+    fake_config: MagicMock,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Joiner resolves category, genre, and account foreign keys into nested objects."""
     monkeypatch.setattr(ZaimCache, "DUMP_MONEY", tmp_path / "money.csv")
     monkeypatch.setattr(ZaimCache, "DUMP_CATEGORIES", tmp_path / "categories.yml")
     monkeypatch.setattr(ZaimCache, "DUMP_GENRES", tmp_path / "genres.yml")
@@ -21,8 +28,9 @@ def test_joiner_returns_money_with_joined_fields(
         joiner = Joiner(fake_config)
         money = next(joiner.list_money)
 
-    assert money.amount == 500
-    assert money.category is not None and money.category["name"] == "食費"
-    assert money.genre is not None and money.genre["name"] == "外食"
-    assert money.from_account is not None and money.from_account["name"] == "現金"
+    assert money.amount == EXPECTED_AMOUNT
     assert money.to_account is None  # to_account_id=0 is falsy → None
+    assert money.category is not None
+    assert money.genre is not None
+    assert money.from_account is not None
+    assert (money.category["name"], money.genre["name"], money.from_account["name"]) == ("食費", "外食", "現金")

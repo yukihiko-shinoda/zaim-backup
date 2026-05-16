@@ -4,7 +4,6 @@ import csv
 from collections.abc import Generator
 from pathlib import Path
 from typing import Any
-from typing import Generic
 from typing import TypedDict
 from typing import TypeVar
 from typing import cast
@@ -28,7 +27,9 @@ class TypedDictReference(TypedDict):
 TypedDictMeta = TypedDictReference().__class__.__bases__[0]
 
 
-class TypeFix(Generic[TypeVarTypedDict]):
+class TypeFix[TypeVarTypedDict]:
+    """Applies TypedDict field types to a raw string-keyed dict row."""
+
     def __init__(self, type_typed_dict: type[TypeVarTypedDict]) -> None:
         if not isinstance(type_typed_dict, type) or not issubclass(type_typed_dict, TypedDictMeta):
             msg = f"Expected a subclass of TypedDict, got {type_typed_dict}"
@@ -41,6 +42,8 @@ class TypeFix(Generic[TypeVarTypedDict]):
 
 
 class ZaimCache:
+    """Caches Zaim API responses to local CSV and YAML files."""
+
     DIRECTORY_CACHE = Path(".cache_zaim_api")
     DUMP_MONEY = DIRECTORY_CACHE / "zaim_money.csv"
     DUMP_CATEGORIES = DIRECTORY_CACHE / "zaim_categories.yml"
@@ -68,6 +71,7 @@ class ZaimCache:
         file: Path,
         typed_dict: type[TypeVarTypedDict],
     ) -> Generator[TypeVarTypedDict]:
+        """Yield typed rows from a CSV file, converting each value to its TypedDict field type."""
         type_fix = TypeFix(typed_dict)
         with file.open("r", encoding="utf-8") as text_io:
             yield from (type_fix(row) for row in csv.DictReader(text_io, fieldnames=header))
@@ -78,6 +82,7 @@ class ZaimCache:
 
     @property
     def money(self) -> Generator[MoneyTypeDef]:
+        """Return money rows, fetching from the API and caching to CSV on the first call."""
         property_names = list(get_type_hints(MoneyTypeDef).keys())
         if not self.DUMP_MONEY.exists():
             self.dump_to_csv(property_names, self.zaim_api.get_data(), self.DUMP_MONEY)
@@ -86,6 +91,7 @@ class ZaimCache:
 
     @property
     def categories(self) -> list[Category]:
+        """Return categories, fetching from the API and caching to YAML on the first call."""
         if not self.DUMP_CATEGORIES.exists():
             # Reason: The mypy's issue:
             # - TypedDict cannot be used where a normal dict is expected · Issue #4976 · python/mypy · GitHub
@@ -96,6 +102,7 @@ class ZaimCache:
 
     @property
     def genres(self) -> list[Genre]:
+        """Return genres, fetching from the API and caching to YAML on the first call."""
         if not self.DUMP_GENRES.exists():
             # Reason: The mypy's issue:
             # - TypedDict cannot be used where a normal dict is expected · Issue #4976 · python/mypy · GitHub
@@ -106,6 +113,7 @@ class ZaimCache:
 
     @property
     def accounts(self) -> list[Genre]:
+        """Return accounts, fetching from the API and caching to YAML on the first call."""
         if not self.DUMP_ACCOUNTS.exists():
             # Reason: The mypy's issue:
             # - TypedDict cannot be used where a normal dict is expected · Issue #4976 · python/mypy · GitHub

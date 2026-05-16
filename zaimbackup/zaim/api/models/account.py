@@ -2,10 +2,6 @@
 
 from typing import TypedDict
 
-from pyzaim import ZaimAPI
-
-from zaimbackup.config import Config
-
 
 class Account(TypedDict):
     """The model of Zaim account."""
@@ -20,11 +16,8 @@ class Account(TypedDict):
     parent_account_id: int
 
 
-def accounts() -> dict[str, Account]:
-    """Gets the accounts from Zaim."""
-    api = ZaimAPI(**Config().api)
-    # Reason: No way to avoid this issue. pylint: disable-next=protected-access
-    response = api._get_account()  # noqa: SLF001
+def accounts(response: dict[str, list[Account]]) -> dict[str, Account]:
+    """Gets the accounts from a raw API response dict."""
     dictionary_account = {}
     for account in response["accounts"]:
         if account["active"] == -1:

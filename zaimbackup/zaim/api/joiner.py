@@ -19,12 +19,14 @@ TypeVarMoney = TypeVar("TypeVarMoney", bound=Money)
 
 
 class Joiner:
+    """Enriches raw MoneyTypeDef records with joined Category, Genre, and Account objects."""
+
     def __init__(self, config: Config, *, model_money: type[Money] | None = None) -> None:
         self.zaim_cache = ZaimCache(config)
         self.dict_category = {category["id"]: category for category in self.zaim_cache.categories}
         self.dict_genre = {genre["id"]: genre for genre in self.zaim_cache.genres}
         self.dict_account = {account["id"]: account for account in self.zaim_cache.accounts}
-        self.model_money: type[Money] = model_money if model_money else Money
+        self.model_money: type[Money] = model_money or Money
         self._list_money_object: Generator[Money] | None = None
 
     @property

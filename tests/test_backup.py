@@ -13,6 +13,7 @@ from zaimbackup.zaim.api.models.money import MoneyTypeDef
 
 
 def test_save_as_csv_writes_header_and_row(tmp_path: Path, mock_zaim_api: MagicMock) -> None:
+    """save_as_csv writes a header row and the provided data rows to the output file."""
     out = tmp_path / "out.csv"
     data = mock_zaim_api.get_data.return_value
     save_as_csv(out, data)
@@ -36,6 +37,7 @@ def test_main_creates_money_csv(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
+    """Main() calls the Zaim API and writes money.csv to the current directory."""
     monkeypatch.chdir(tmp_path)
     with (
         patch("zaimbackup.backup.ZaimAPI", return_value=mock_zaim_api) as mock_cls,
