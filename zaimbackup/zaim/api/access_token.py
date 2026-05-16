@@ -4,7 +4,9 @@
   https://github.com/liebe-magi/pyzaim
 """
 
-from pyzaim import get_access_token
+# Reason: Only importing library function
+from pyzaim import get_access_token  # pragma: no cover
 
-if __name__ == "__main__":
+# Reason: Only calling library function
+if __name__ == "__main__":  # pragma: no cover
     get_access_token()

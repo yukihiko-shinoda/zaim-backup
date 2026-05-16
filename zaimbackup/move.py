@@ -3,8 +3,6 @@
 from logging import DEBUG
 from logging import getLogger
 from typing import Any
-from typing import Generic
-from typing import TypeVar
 from typing import cast
 
 from pyzaim import ZaimAPI
@@ -17,10 +15,10 @@ from zaimbackup.zaim.api.update import ParameterIncome
 from zaimbackup.zaim.api.update import ParameterPayment
 from zaimbackup.zaim.api.update import ParameterTransfer
 
-TypeVarParameters = TypeVar("TypeVarParameters")
 
+class AbstractMove[TypeVarParameters]:
+    """Abstract base for migrating a Zaim money entry to a replacement account."""
 
-class AbstractMove(Generic[TypeVarParameters]):
     def __init__(self, zaim_api: ZaimAPI, account_to_be_replaced: int, account_to_replace_with: int) -> None:
         self.logger = getLogger(__name__)
         self.zaim_api = zaim_api
@@ -43,6 +41,8 @@ class AbstractMove(Generic[TypeVarParameters]):
 
 
 class MoveTransfer(AbstractMove[ParameterTransfer]):
+    """Migrates a transfer money entry to a new account."""
+
     def __init__(self, zaim_api: ZaimAPI, account_to_be_replaced: int, account_to_replace_with: int) -> None:
         super().__init__(zaim_api, account_to_be_replaced, account_to_replace_with)
         self.logger.setLevel(DEBUG)
@@ -72,6 +72,8 @@ class MoveTransfer(AbstractMove[ParameterTransfer]):
 
 
 class MovePayment(AbstractMove[ParameterPayment]):
+    """Migrates a payment money entry to a new account."""
+
     def build_parameters(self, money: Money) -> ParameterPayment:
         if not money.from_account:
             msg = f"Missing account information for payment: {money}"
@@ -94,6 +96,8 @@ class MovePayment(AbstractMove[ParameterPayment]):
 
 
 class MoveIncome(AbstractMove[ParameterIncome]):
+    """Migrates an income money entry to a new account."""
+
     def build_parameters(self, money: Money) -> ParameterIncome:
         if not money.to_account:
             msg = f"Missing account information for income: {money}"
@@ -114,6 +118,8 @@ class MoveIncome(AbstractMove[ParameterIncome]):
 
 
 class Move:
+    """Orchestrator that migrates all matching money entries to a replacement account."""
+
     def __init__(self, config: Config, account_to_be_replaced: int, account_to_replace_with: int) -> None:
         self.join = Joiner(config)
         self.account_to_be_replaced = account_to_be_replaced
@@ -130,8 +136,6 @@ class Move:
             self.move(money)
 
     def move(self, money: Money) -> None:
-        # if not (money.date_as_date.year >= 2025 and money.date_as_date.month >= 3):
-        #     return
         if (not money.from_account or money.from_account["id"] != self.account_to_be_replaced) and (
             not money.to_account or money.to_account["id"] != self.account_to_be_replaced
         ):
