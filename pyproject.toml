@@ -35,6 +35,7 @@ dev = [
     "invokelint>=0.8.1",
     "mypy",
     "pylint",
+    "pytest",
     "pyvelocity;python_version >= '3.9'",
     # Since the radon can't run when use pytest log format:
     # - Radon can't run when use pytest log fornat: `$()d` · Issue #251 · rubik/radon
