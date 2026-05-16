@@ -1,19 +1,25 @@
 """Moves money entries from one account to another in Zaim."""
 
+from __future__ import annotations
+
 from logging import DEBUG
 from logging import getLogger
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import cast
 
 from pyzaim import ZaimAPI
-from requests import Response
 
-from zaimbackup.config import Config
 from zaimbackup.zaim.api.joiner import Joiner
-from zaimbackup.zaim.api.models.money import Money
 from zaimbackup.zaim.api.update import ParameterIncome
 from zaimbackup.zaim.api.update import ParameterPayment
 from zaimbackup.zaim.api.update import ParameterTransfer
+
+if TYPE_CHECKING:
+    from requests import Response
+
+    from zaimbackup.config import Config
+    from zaimbackup.zaim.api.models.money import Money
 
 
 class AbstractMove[TypeVarParameters]:

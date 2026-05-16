@@ -1,13 +1,19 @@
 """Smoke test: full join path without network or workspace I/O."""
 
-from pathlib import Path
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
-import pytest
-
 from zaimbackup.zaim.api.cache import ZaimCache
 from zaimbackup.zaim.api.joiner import Joiner
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
+
 
 EXPECTED_AMOUNT = 500
 

@@ -1,13 +1,17 @@
 """Shared fixtures and fake data for zaimbackup tests."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 
 import pytest
 
-from zaimbackup.zaim.api.models.account import Account
-from zaimbackup.zaim.api.models.category import Category
-from zaimbackup.zaim.api.models.genre import Genre
-from zaimbackup.zaim.api.models.money import MoneyTypeDef
+if TYPE_CHECKING:
+    from zaimbackup.zaim.api.models.account import Account
+    from zaimbackup.zaim.api.models.category import Category
+    from zaimbackup.zaim.api.models.genre import Genre
+    from zaimbackup.zaim.api.models.money import MoneyTypeDef
 
 FAKE_CATEGORY: Category = {
     "id": 1,

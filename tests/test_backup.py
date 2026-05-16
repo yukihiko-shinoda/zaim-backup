@@ -1,15 +1,20 @@
 """Tests for zaimbackup/backup.py: save_as_csv and main."""
 
+from __future__ import annotations
+
 import csv
-from pathlib import Path
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 from unittest.mock import patch
-
-import pytest
 
 from zaimbackup.backup import main
 from zaimbackup.backup import save_as_csv
 from zaimbackup.zaim.api.models.money import MoneyTypeDef
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    import pytest
 
 
 def test_save_as_csv_writes_header_and_row(tmp_path: Path, mock_zaim_api: MagicMock) -> None:

@@ -1,8 +1,10 @@
 """To cache Zaim API data."""
 
+from __future__ import annotations
+
 import csv
-from collections.abc import Generator
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import TypedDict
 from typing import TypeVar
@@ -11,11 +13,15 @@ from typing import get_type_hints
 
 import yaml
 
-from zaimbackup.config import Config
 from zaimbackup.zaim.api import ZaimApi
-from zaimbackup.zaim.api.models.category import Category
-from zaimbackup.zaim.api.models.genre import Genre
 from zaimbackup.zaim.api.models.money import MoneyTypeDef
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from zaimbackup.config import Config
+    from zaimbackup.zaim.api.models.category import Category
+    from zaimbackup.zaim.api.models.genre import Genre
 
 TypeVarTypedDict = TypeVar("TypeVarTypedDict")
 
@@ -54,14 +60,14 @@ class ZaimCache:
         self.zaim_api = ZaimApi(**config.api)
 
     def dump_to_yaml(self, dictionary: list[dict[str, Any]], file: Path) -> None:
-        file.write_text(yaml.safe_dump(dictionary, allow_unicode=True))
+        file.write_text(yaml.safe_dump(dictionary, allow_unicode=True), encoding="utf-8")
 
     # Reason: YAML is not typed.
     def load_from_yaml(self, file: Path) -> Any:  # noqa: ANN401
-        return yaml.safe_load(file.read_text())
+        return yaml.safe_load(file.read_text(encoding="utf-8"))
 
     def dump_to_csv(self, header: list[str], dictionary: list[dict[str, Any]], file: Path) -> None:
-        with file.open("w", encoding="utf-8") as text_io:
+        with file.open("w", encoding="utf-8", newline="") as text_io:
             writer = csv.DictWriter(text_io, fieldnames=header)
             writer.writerows(dictionary)
 
@@ -73,7 +79,7 @@ class ZaimCache:
     ) -> Generator[TypeVarTypedDict]:
         """Yield typed rows from a CSV file, converting each value to its TypedDict field type."""
         type_fix = TypeFix(typed_dict)
-        with file.open("r", encoding="utf-8") as text_io:
+        with file.open("r", encoding="utf-8", newline="") as text_io:
             yield from (type_fix(row) for row in csv.DictReader(text_io, fieldnames=header))
 
     def fix_type(self, row: dict[str, Any], typed_dict: type[TypeVarTypedDict]) -> TypeVarTypedDict:
