@@ -217,6 +217,10 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+# Claude Code
+/.claude/settings.local.json
+/.claude/*.py
+
 # For this project
 config.yml
 money.csv
