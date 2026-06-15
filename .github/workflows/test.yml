@@ -8,13 +8,10 @@ on:
       - main
 permissions:
   contents: read
-  packages: read
 jobs:
   call-workflow-test:
-    uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-test.yml@main
+    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-test/.github/workflows/workflow.yml@3deca6708b4c2b623c7eac175a63973c05c64e3b  # v1.0.0
     with:
       support-python-versions: "[ '3.14' ]"
   call-workflow-lint:
-    uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-lint.yml@main
-    with:
-      enable-xenon: false
+    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-lint/.github/workflows/workflow.yml@0966c64de69c044585bbdca96980a8393c761829  # v1.0.0
