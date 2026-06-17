@@ -1155,7 +1155,7 @@ wheels = [
 
 [[package]]
 name = "pyvelocity"
-version = "0.9.0"
+version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1163,9 +1163,9 @@ dependencies = [
     { name = "tomli" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8b/ca/ab1b543db430cf308481482e0e8f70210f4191c1534971df04b2c9eacba4/pyvelocity-0.9.0.tar.gz", hash = "sha256:7ff5b011042373c8413b5e4fed65968dc2418819cd684ee154d50cc9847b339b", size = 27878, upload-time = "2026-05-16T14:59:13.001Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/07/6d/37642261223b4b79159cc85b6cc1aa2659b8fcb0705f8349698e47df241f/pyvelocity-0.9.1.tar.gz", hash = "sha256:74da20084515247a4685da947f6515cb187a2f35a034c9696a2459e2802dbb40", size = 28708, upload-time = "2026-06-15T09:55:00.095Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/46/20/2490c0ec5234845024480008bef274162ae9ad53c3c589cc7278b0019b0c/pyvelocity-0.9.0-py3-none-any.whl", hash = "sha256:607d328eec381d4c6c0388d3f7139b2da5cdeb87239dc93c933868394df6a67d", size = 36736, upload-time = "2026-05-16T14:59:12.155Z" },
+    { url = "https://files.pythonhosted.org/packages/31/8c/63e19269fa382c9f0dcf58fe3459fd8e376b265f368e1b4ea862a9818cb0/pyvelocity-0.9.1-py3-none-any.whl", hash = "sha256:90c6243e8ed873f9b8a13aabbe398778b40a66534cac736b39b0da4f1ce4d5f1", size = 36738, upload-time = "2026-06-15T09:54:58.969Z" },
 ]
 
 [[package]]
