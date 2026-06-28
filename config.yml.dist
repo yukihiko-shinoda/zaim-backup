@@ -1,0 +1,21 @@
+api:
+  # From Zaim Developers center:
+  # - Zaim Developers Center
+  #   https://dev.zaim.net/
+  consumer_id: <コンシューマ ID>
+  consumer_secret: <コンシューマシークレット>
+  # From `uv run zaimbackup/zaim/api/access_token.py`
+  access_token: <access token>
+  access_token_secret: <access token secret>
+  oauth_verifier: <oauth verifier>
+# For move.py
+# How to know account ID:
+# - Get from API:
+#   - Zaim Developers Center
+#     https://dev.zaim.net/home/api#account_get
+# - Run following command in developer tool on following page:
+#   `$x('//*[@id="categories"]/tbody/tr/@sort-data-id').forEach(el => console.log(el.value));`
+#   - 口座設定｜家計簿アプリ くふう Zaim
+#     https://zaim.net/accounts
+account_id_manually_input: <account ID>
+account_id_api_connection: <account ID>

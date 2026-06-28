@@ -77,4 +77,6 @@ def fake_config() -> MagicMock:
         "access_token_secret": "fake",
         "oauth_verifier": "fake",
     }
+    cfg.account_id_manually_input = 100
+    cfg.account_id_api_connection = 200
     return cfg
