@@ -126,10 +126,13 @@ class MoveIncome(AbstractMove[ParameterIncome]):
 class Move:
     """Orchestrator that migrates all matching money entries to a replacement account."""
 
-    def __init__(self, config: Config, account_to_be_replaced: int, account_to_replace_with: int) -> None:
+    def __init__(self, config: Config) -> None:
+        if config.account_id_api_connection is None or config.account_id_manually_input is None:
+            msg = "Missing account IDs in config"
+            raise ValueError(msg)
+        self.account_to_be_replaced = config.account_id_manually_input
+        self.account_to_replace_with = config.account_id_api_connection
         self.join = Joiner(config)
-        self.account_to_be_replaced = account_to_be_replaced
-        self.account_to_replace_with = account_to_replace_with
         zaim_api = ZaimAPI(**config.api)
         self.dictionary_move_process: dict[str, AbstractMove[Any]] = {
             "transfer": MoveTransfer(zaim_api, self.account_to_be_replaced, self.account_to_replace_with),

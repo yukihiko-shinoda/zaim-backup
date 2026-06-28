@@ -234,7 +234,7 @@ def _make_move(fake_config: MagicMock, mock_api: MagicMock) -> Move:
         patch("zaimbackup.move.ZaimAPI", return_value=mock_api),
         patch("zaimbackup.move.Joiner"),
     ):
-        return Move(fake_config, 100, 200)
+        return Move(fake_config)
 
 
 def test_move_move_skips_when_neither_account_matches(fake_config: MagicMock) -> None:
@@ -332,7 +332,7 @@ def test_move_call_iterates_list_money(fake_config: MagicMock) -> None:
         patch("zaimbackup.move.Joiner") as mock_joiner_cls,
     ):
         mock_joiner_cls.return_value.list_money = iter([money1, money2])
-        move_obj = Move(fake_config, 100, 200)
+        move_obj = Move(fake_config)
         move_obj()
     assert mock_api.update_payment.call_count == 1
     assert mock_api.update_income.call_count == 1

@@ -8,15 +8,12 @@ from logging import getLogger
 from zaimbackup.config import Config
 from zaimbackup.move import Move
 
-ACCOUNT_ID_MANUALLY_INPUT = 3
-ACCOUNT_ID_API_CONNECTION = 20145626
-
 basicConfig(level=DEBUG)
 getLogger().setLevel(WARNING)
 
 
 def main() -> None:
-    Move(Config(), ACCOUNT_ID_MANUALLY_INPUT, ACCOUNT_ID_API_CONNECTION)()
+    Move(Config())()
 
 
 if __name__ == "__main__":
