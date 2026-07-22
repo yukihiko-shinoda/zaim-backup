@@ -1,6 +1,6 @@
 [dependency-groups]
 dev = [
-    "invokelint[basic]>=0.20.0",
+    "invokelint[basic]>=0.20.1",
     "pyvelocity;python_version >= '3.9'",
     "types-pyyaml",
     "types-requests-oauthlib",
