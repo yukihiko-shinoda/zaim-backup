@@ -1673,15 +1673,15 @@ wheels = [
 
 [[package]]
 name = "types-requests-oauthlib"
-version = "2.0.0.20260610"
+version = "2.0.0.20260907"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "requests" },
     { name = "types-oauthlib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/ea/c826ce3b221a2492f9188bc50dc79d871ba4f3044f3a1a951ac82df38090/types_requests_oauthlib-2.0.0.20260610.tar.gz", hash = "sha256:367b8c41abf4d97cdea86bbd6723d92ad8e13b8c6c7c09474e2889a3a4df25b7", size = 11275, upload-time = "2026-06-10T06:11:36.434Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/09/e4f8e39b89626cec4ed7915cf28992269756f0eb56a98a187a05f3b2ac00/types_requests_oauthlib-2.0.0.20260907.tar.gz", hash = "sha256:fc2c725ad136c9bba3b8416fb3f737f3aef98c4c77196e81aeed085b6d8e9aa3", size = 11763, upload-time = "2026-09-07T06:43:41.201Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e3/52/c91b7e86f341ee7de9f8581a471be517da1aa7ca8ac3e785524ffba8a41a/types_requests_oauthlib-2.0.0.20260610-py3-none-any.whl", hash = "sha256:fd6467243d15310437c86be0c466047af5d8b2d6851040bc1efff8fa0a8e694c", size = 14330, upload-time = "2026-06-10T06:11:35.659Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/31/5247e2ecf66c6990b5c49a48707322f36c3ccce25e8a4725b066dea53be7/types_requests_oauthlib-2.0.0.20260907-py3-none-any.whl", hash = "sha256:985c9a50dc95dda0667c2afa8b90a5a41d12a8e6221ae28a5372cf838f76fcfc", size = 14412, upload-time = "2026-09-07T06:43:40.305Z" },
 ]
 
 [[package]]
