@@ -1,4 +1,4 @@
-FROM futureys/claude-code-python-development:20261019130000
+FROM futureys/claude-code-python-development:20261102135000
 COPY pyproject.toml uv.lock /workspace/
 RUN uv sync
 COPY . /workspace/
