@@ -16,8 +16,6 @@ from zaimbackup.zaim.api.models.money import MoneyTypeDef
 if TYPE_CHECKING:
     from pathlib import Path
 
-    import pytest
-
 
 def test_save_as_csv_writes_header_and_row(tmp_path: Path, mock_zaim_api: MagicMock) -> None:
     """save_as_csv writes a header row and the provided data rows to the output file."""
@@ -41,16 +39,15 @@ def test_save_as_csv_empty_data(tmp_path: Path) -> None:
 def test_main_creates_money_csv(
     fake_config: MagicMock,
     mock_zaim_api: MagicMock,
-    monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
-    """Main() calls the Zaim API and writes money.csv to the current directory."""
-    monkeypatch.chdir(tmp_path)
+    """Main() calls the Zaim API and writes money.csv into a newly created directory."""
+    directory = tmp_path / "datasets" / "zaim-backup"
     with (
         patch("zaimbackup.backup.ZaimAPI", return_value=mock_zaim_api) as mock_cls,
         patch("zaimbackup.backup.Config", return_value=fake_config),
     ):
-        main()
+        main(directory)
     mock_cls.assert_called_once_with(**fake_config.api)
     mock_zaim_api.get_data.assert_called_once()
-    assert (tmp_path / "money.csv").exists()
+    assert (directory / "money.csv").exists()

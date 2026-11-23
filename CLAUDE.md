@@ -38,7 +38,7 @@ uv run python move.py
 
 The project is a Zaim (Japanese personal finance app) backup and data manipulation tool. It has two entry points:
 
-- **[backup.py](backup.py)** — Fetches all money transactions via the Zaim API and saves them to `money.csv`
+- **[backup.py](backup.py)** — Fetches all money transactions via the Zaim API and saves them to `~/datasets/zaim-backup/money.csv` (kept outside the repository so that Claude Code's managed-settings deny rule on `~/datasets` covers it)
 - **[move.py](move.py)** — Moves money entries from one account to another (used for migrating manually-entered records to API-connected account records)
 
 ### Package structure (`zaimbackup/`)
