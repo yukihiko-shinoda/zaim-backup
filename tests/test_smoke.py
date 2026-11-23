@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Smoke test: full join path without network or workspace I/O."""
 
 from __future__ import annotations

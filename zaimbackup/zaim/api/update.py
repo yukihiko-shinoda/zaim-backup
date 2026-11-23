@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Parameter TypedDicts for Zaim API update calls."""
 
 from __future__ import annotations

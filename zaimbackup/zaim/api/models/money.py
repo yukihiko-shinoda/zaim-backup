@@ -1,8 +1,10 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Zaim API money."""
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import TypedDict
@@ -66,6 +68,6 @@ class Money:
     to_account: Account | None = None
 
     @property
-    def date_as_date(self) -> datetime.date:
+    def date_as_date(self) -> dt.date:
         """Return the date as a datetime.date object."""
-        return datetime.datetime.strptime(self.date, "%Y-%m-%d").astimezone(JST).date()
+        return dt.datetime.strptime(self.date, "%Y-%m-%d").astimezone(JST).date()

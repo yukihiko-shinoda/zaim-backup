@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Zaim account."""
 
 from typing import TypedDict
@@ -17,7 +19,7 @@ class Account(TypedDict):
 
 
 def accounts(response: dict[str, list[Account]]) -> dict[str, Account]:
-    """Gets the accounts from a raw API response dict."""
+    """Get the accounts from a raw API response dict."""
     dictionary_account = {}
     for account in response["accounts"]:
         if account["active"] == -1:

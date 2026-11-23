@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for zaimbackup/backup.py: save_as_csv and main."""
 
 from __future__ import annotations

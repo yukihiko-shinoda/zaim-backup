@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """To issue access token for Zaim API.
 
 - liebe-magi/pyzaim: Zaimのデータを取得・操作するPythonパッケージ
