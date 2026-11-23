@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Shared fixtures and fake data for zaimbackup tests."""
 
 from __future__ import annotations

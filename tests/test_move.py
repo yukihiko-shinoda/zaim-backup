@@ -1,8 +1,10 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tests for zaimbackup/move.py: AbstractMove subclasses and Move orchestrator."""
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import cast
@@ -26,7 +28,7 @@ if TYPE_CHECKING:
 
 FAKE_ACCOUNT_OTHER: Account = cast("Account", {**FAKE_ACCOUNT, "id": 200, "name": "銀行"})
 FAKE_ACCOUNT_THIRD: Account = cast("Account", {**FAKE_ACCOUNT, "id": 999, "name": "Other", "sort": 2})
-EXPECTED_DATE = datetime.date(2024, 1, 15)
+EXPECTED_DATE = dt.date(2024, 1, 15)
 
 
 def _make_money(**overrides: object) -> Money:
